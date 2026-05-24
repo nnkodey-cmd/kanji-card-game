@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>漢字よみかた神経衰弱 🎴</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <div class="header-inner">
+      <h1 class="title">
+        <span class="title-kanji">漢字</span>
+        <span class="title-sub">よみかた神経衰弱</span>
+        <span class="title-emoji">🎴</span>
+      </h1>
+      <div class="header-controls">
+        <div class="grade-selector">
+          <label>学年：</label>
+          <select id="gradeSelect">
+            <option value="1">1年生</option>
+            <option value="2">2年生</option>
+            <option value="3">3年生</option>
+            <option value="4">4年生</option>
+            <option value="5">5年生</option>
+            <option value="6">6年生</option>
+          </select>
+        </div>
+        <div class="pair-selector">
+          <label>ペア数：</label>
+          <select id="pairSelect">
+            <option value="6">6ペア</option>
+            <option value="8" selected>8ペア</option>
+            <option value="10">10ペア</option>
+            <option value="12">12ペア</option>
+          </select>
+        </div>
+        <button class="btn-start" id="btnStart">🎮 スタート！</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ステータスバー -->
+  <div class="status-bar" id="statusBar" style="display:none">
+    <div class="status-item">
+      <span class="status-icon">🔄</span>
+      <span class="status-label">めくった回数</span>
+      <span class="status-value" id="flipCount">0</span>
+    </div>
+    <div class="status-item">
+      <span class="status-icon">✅</span>
+      <span class="status-label">マッチ</span>
+      <span class="status-value" id="matchCount">0</span>
+    </div>
+    <div class="status-item">
+      <span class="status-icon">⏱️</span>
+      <span class="status-label">タイム</span>
+      <span class="status-value" id="timerDisplay">0:00</span>
+    </div>
+    <button class="btn-reset" id="btnReset">🔁 やりなおす</button>
+  </div>
+
+  <!-- ゲームボード -->
+  <main class="main">
+    <div class="start-screen" id="startScreen">
+      <div class="start-card">
+        <div class="start-emoji">🀄</div>
+        <h2>漢字とよみかなを<br/>マッチさせよう！</h2>
+        <p>漢字カードとひらがなカードが<br/>バラバラに並んでいます。<br/>同じ組み合わせを見つけてね！</p>
+        <button class="btn-start-big" id="btnStartBig">🎮 ゲームスタート！</button>
+      </div>
+    </div>
+    <div class="board" id="board"></div>
+  </main>
+
+  <!-- クリア画面 -->
+  <div class="clear-overlay" id="clearOverlay" style="display:none">
+    <div class="clear-card">
+      <div class="clear-stars" id="clearStars"></div>
+      <h2 class="clear-title">🎉 クリア！ 🎉</h2>
+      <div class="clear-stats">
+        <div class="clear-stat">
+          <span class="clear-stat-label">めくった回数</span>
+          <span class="clear-stat-value" id="finalFlips">-</span>
+        </div>
+        <div class="clear-stat">
+          <span class="clear-stat-label">かかった時間</span>
+          <span class="clear-stat-value" id="finalTime">-</span>
+        </div>
+        <div class="clear-stat">
+          <span class="clear-stat-label">評価</span>
+          <span class="clear-stat-value" id="finalRating">-</span>
+        </div>
+      </div>
+      <div class="clear-buttons">
+        <button class="btn-again" id="btnAgain">🔁 もう一度！</button>
+        <button class="btn-change" id="btnChange">📚 別の学年へ</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="kanji-data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
