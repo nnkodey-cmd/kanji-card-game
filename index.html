@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>漢字よみかた神経衰弱 🎴</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ========== ヘッダー ========== -->
+  <header class="header">
+    <div class="header-inner">
+      <h1 class="title">
+        <span class="title-kanji">漢字</span>
+        <span class="title-sub">よみかた神経衰弱</span>
+        <span class="title-emoji">🎴</span>
+      </h1>
+      <div class="header-controls">
+        <div class="grade-selector">
+          <label>学年：</label>
+          <select id="gradeSelect">
+            <option value="1">1年生</option>
+            <option value="2">2年生</option>
+            <option value="3">3年生</option>
+            <option value="4">4年生</option>
+            <option value="5">5年生</option>
+            <option value="6">6年生</option>
+          </select>
+        </div>
+        <div class="pair-selector">
+          <label>ペア数：</label>
+          <select id="pairSelect">
+            <option value="6">6ペア</option>
+            <option value="8" selected>8ペア</option>
+            <option value="10">10ペア</option>
+            <option value="12">12ペア</option>
+          </select>
+        </div>
+        <button class="btn-header-start" id="btnHeaderStart">🎮 スタート！</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== ステータスバー（1人用） ========== -->
+  <div class="status-bar" id="statusBar1P" style="display:none">
+    <div class="status-item">
+      <span class="status-icon">🔄</span>
+      <span class="status-label">めくった回数</span>
+      <span class="status-value" id="flipCount">0</span>
+    </div>
+    <div class="status-item">
+      <span class="status-icon">✅</span>
+      <span class="status-label">マッチ</span>
+      <span class="status-value" id="matchCount1P">0</span>
+    </div>
+    <div class="status-item">
+      <span class="status-icon">🔥</span>
+      <span class="status-label">コンボ</span>
+      <span class="status-value" id="comboDisplay">0</span>
+    </div>
+    <div class="status-item">
+      <span class="status-icon">⏱️</span>
+      <span class="status-label">タイム</span>
+      <span class="status-value" id="timerDisplay">0:00</span>
+    </div>
+    <button class="btn-hint" id="btnHint">💡 ヒント <span id="hintCount">3</span></button>
+    <button class="btn-reset" id="btnReset1P">🔁 やりなおす</button>
+  </div>
+
+  <!-- ========== ステータスバー（2人対戦用） ========== -->
+  <div class="status-bar status-bar-2p" id="statusBar2P" style="display:none">
+    <div class="player-score" id="player1Score">
+      <div class="player-name" id="p1name">🔴 プレイヤー1</div>
+      <div class="player-pts" id="p1pts">0 ポイント</div>
+    </div>
+    <div class="turn-indicator" id="turnIndicator">
+      <div class="turn-arrow" id="turnArrow">▼</div>
+      <div class="turn-label" id="turnLabel">プレイヤー1 のターン</div>
+      <div class="status-item">
+        <span class="status-icon">✅</span>
+        <span class="status-label">のこり</span>
+        <span class="status-value" id="matchCount2P">0</span>
+      </div>
+    </div>
+    <div class="player-score player-score-right" id="player2Score">
+      <div class="player-name" id="p2name">🔵 プレイヤー2</div>
+      <div class="player-pts" id="p2pts">0 ポイント</div>
+    </div>
+    <button class="btn-reset btn-reset-2p" id="btnReset2P">🔁 やりなおす</button>
+  </div>
+
+  <!-- ========== メイン ========== -->
+  <main class="main">
+
+    <!-- スタート画面 -->
+    <div class="start-screen" id="startScreen">
+      <div class="start-card">
+        <div class="start-emoji">🀄</div>
+        <h2>漢字とよみかなを<br/>マッチさせよう！</h2>
+        <p>漢字カードとひらがなカードが<br/>バラバラに並んでいます。<br/>同じ組み合わせを見つけてね！</p>
+        <div class="mode-buttons">
+          <button class="btn-mode btn-solo" id="btnSolo">
+            <span class="mode-icon">👤</span>
+            <span class="mode-name">1人プレイ</span>
+            <span class="mode-desc">タイムと回数に挑戦！</span>
+          </button>
+          <button class="btn-mode btn-vs" id="btnVs">
+            <span class="mode-icon">👥</span>
+            <span class="mode-name">2人対戦</span>
+            <span class="mode-desc">どちらが多く取れるか！</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ゲームボード -->
+    <div class="board" id="board"></div>
+
+    <!-- コンボ演出 -->
+    <div class="combo-banner" id="comboBanner"></div>
+  </main>
+
+  <!-- ========== ターン交代オーバーレイ ========== -->
+  <div class="turn-overlay" id="turnOverlay" style="display:none">
+    <div class="turn-card">
+      <div class="turn-card-icon" id="turnOverlayIcon">🔵</div>
+      <div class="turn-card-title" id="turnOverlayTitle">プレイヤー2 のターン！</div>
+      <div class="turn-card-sub">画面をタップしてスタート</div>
+    </div>
+  </div>
+
+  <!-- ========== クリア画面（1人用） ========== -->
+  <div class="clear-overlay" id="clearOverlay1P" style="display:none">
+    <div class="clear-card">
+      <div class="clear-stars" id="clearStars"></div>
+      <h2 class="clear-title">🎉 クリア！ 🎉</h2>
+      <div class="clear-stats">
+        <div class="clear-stat">
+          <span class="clear-stat-label">めくった回数</span>
+          <span class="clear-stat-value" id="finalFlips">-</span>
+        </div>
+        <div class="clear-stat">
+          <span class="clear-stat-label">かかった時間</span>
+          <span class="clear-stat-value" id="finalTime">-</span>
+        </div>
+        <div class="clear-stat">
+          <span class="clear-stat-label">最大コンボ</span>
+          <span class="clear-stat-value" id="finalCombo">-</span>
+        </div>
+        <div class="clear-stat">
+          <span class="clear-stat-label">評価</span>
+          <span class="clear-stat-value" id="finalRating">-</span>
+        </div>
+      </div>
+      <div class="clear-buttons">
+        <button class="btn-again" id="btnAgain1P">🔁 もう一度！</button>
+        <button class="btn-change" id="btnChange1P">🏠 もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== クリア画面（2人対戦） ========== -->
+  <div class="clear-overlay" id="clearOverlay2P" style="display:none">
+    <div class="clear-card clear-card-2p">
+      <div class="winner-emoji" id="winnerEmoji">🏆</div>
+      <h2 class="clear-title" id="winnerTitle">プレイヤー1 の勝ち！</h2>
+      <div class="vs-result">
+        <div class="vs-player" id="vsP1Result">
+          <div class="vs-player-name">🔴 プレイヤー1</div>
+          <div class="vs-player-score" id="vsP1Score">0 ポイント</div>
+        </div>
+        <div class="vs-separator">vs</div>
+        <div class="vs-player" id="vsP2Result">
+          <div class="vs-player-name">🔵 プレイヤー2</div>
+          <div class="vs-player-score" id="vsP2Score">0 ポイント</div>
+        </div>
+      </div>
+      <div class="clear-buttons">
+        <button class="btn-again" id="btnAgain2P">🔁 もう一度！</button>
+        <button class="btn-change" id="btnChange2P">🏠 もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="kanji-data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
